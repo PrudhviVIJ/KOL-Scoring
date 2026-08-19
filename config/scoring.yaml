@@ -1,0 +1,7 @@
+weights:
+  publication: 0.4
+  nih: 0.2
+  clinical_trials: 0.2
+  society: 0.1
+  recency: 0.1
+

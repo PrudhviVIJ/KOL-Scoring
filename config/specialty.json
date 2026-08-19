@@ -1,0 +1,15 @@
+{
+  "psychiatry": {
+    "keywords": ["psychiatry", "psychiatrist", "mental health"]
+  },
+  "neurology": {
+    "keywords": ["neurology", "neurologist", "brain"]
+  },
+  "anesthesiology": {
+    "keywords": ["anesthesiology", "anesthesiologist", "anesthesia"]
+  },
+  "addiction_medicine": {
+    "keywords": ["addiction", "substance use", "psychedelic"]
+  }
+}
+
