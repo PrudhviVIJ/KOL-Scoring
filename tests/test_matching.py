@@ -51,3 +51,26 @@ def test_match_faculty_to_records_splits_multiple_names():
 
     assert set(result["Matched Person Name"]) == {"John Smith", "Jane Doe"}
     assert result["Faculty Matched"].sum() == 1
+
+
+def test_match_faculty_is_not_dependent_on_column_order():
+    records = pd.DataFrame(
+        {
+            "Canonical Author Name": ["SMITH JOHN"],
+            "PMID": ["1"],
+        }
+    )
+    faculty = pd.DataFrame(
+        {
+            "Department": ["Psychiatry"],
+            "Faculty Name": ["John Smith"],
+        }
+    )
+
+    result = match_faculty(
+        records,
+        faculty,
+        record_name_col="Canonical Author Name",
+    )
+
+    assert bool(result.loc[0, "Faculty Matched"]) is True

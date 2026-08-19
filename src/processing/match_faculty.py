@@ -54,7 +54,9 @@ def match_faculty_to_records(
         how="left",
         suffixes=("", "_faculty"),
     )
-    merged["Faculty Matched"] = merged[faculty.columns[0]].notna() if len(faculty.columns) else False
+    merged["Faculty Matched"] = merged["Normalized Name"].isin(
+        faculty["Normalized Name"]
+    )
     merged["Match Confidence"] = merged["Faculty Matched"].map(
         lambda matched: "Exact" if matched else "Unmatched"
     )
@@ -74,4 +76,3 @@ def match_faculty(
         record_name_col=record_name_col,
         faculty_name_col=faculty_name_col,
     )
-

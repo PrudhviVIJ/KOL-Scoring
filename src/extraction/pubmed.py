@@ -245,7 +245,43 @@ class PubMedClient:
             data=data,
         )
 
-        return ET.fromstring(response.content)
+        # PubMed sometimes returns a truncated body even when the HTTP call
+        # succeeds. Treat that as retryable so one bad batch does not abort
+        # the entire extraction.
+        last_error: Exception | None = None
+
+        for attempt in range(self.config.retries):
+            try:
+                return ET.fromstring(response.content)
+
+            except ET.ParseError as exc:
+                last_error = exc
+                preview = response.text[:500].replace("\n", " ").replace("\r", " ")
+                logging.warning(
+                    "PubMed XML parse failed (attempt %s/%s) for %s PMIDs: %s. "
+                    "Response preview: %s",
+                    attempt + 1,
+                    self.config.retries,
+                    len(pmids),
+                    exc,
+                    preview,
+                )
+
+                if attempt == self.config.retries - 1:
+                    break
+
+                wait = min(60, 2 ** attempt)
+                time.sleep(wait)
+                response = self.request_with_retry(
+                    "POST",
+                    f"{EUTILS_BASE}/efetch.fcgi",
+                    data=data,
+                )
+
+        raise RuntimeError(
+            f"PubMed XML parsing failed after {self.config.retries} attempts "
+            f"for a batch of {len(pmids)} PMIDs."
+        ) from last_error
 
     def download_all_xml(
         self,
