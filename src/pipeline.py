@@ -24,7 +24,7 @@ class PipelineConfig:
     output_dir: Path = DEFAULT_OUTPUT_DIR
     output_file: str = "KOL_Ranking.xlsx"
 
-
+  
 def _read_table(path: Path) -> pd.DataFrame:
     if not path.exists():
         return pd.DataFrame()

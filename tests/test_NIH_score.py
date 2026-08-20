@@ -1,6 +1,6 @@
 import pandas as pd
 
-from nih_ci_ready import (
+from src.extraction.nih import (
     build_dataframe,
     build_source_url,
     clean_excel_text,

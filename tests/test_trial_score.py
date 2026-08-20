@@ -1,6 +1,6 @@
 import pandas as pd
 
-from clinical_trials_ci_ready import (
+from src.extraction.clinical_trials import (
     build_dataframe,
     first_text,
     infer_center_type,

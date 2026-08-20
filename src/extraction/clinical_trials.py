@@ -33,7 +33,6 @@ import pandas as pd
 import requests
 from tqdm import tqdm
 
-
 BASE_URL = "https://clinicaltrials.gov/api/v2/studies"
 
 DEFAULT_SEARCH_TERMS = (
@@ -46,7 +45,6 @@ DEFAULT_SEARCH_TERMS = (
     "mescaline",
     "LSD",
 )
-
 
 @dataclass(frozen=True)
 class ClinicalTrialsConfig:
@@ -129,7 +127,6 @@ def list_to_text(value: Any) -> str:
         return "; ".join(str(x) for x in value if x is not None)
 
     return str(value)
-
 
 def unique_join(values: list[Any]) -> str:
     """Join non-empty values while preserving first-seen order."""
