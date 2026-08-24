@@ -1,7 +1,7 @@
 import pandas as pd
 from xml.etree import ElementTree as ET
 
-from src.extraction.clinical_trials import(
+from src.extraction.pubmed import(
     build_author_mapping_df,
     build_author_summary,
     build_publication_df,
