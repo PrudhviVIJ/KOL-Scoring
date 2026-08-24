@@ -25,17 +25,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install pandas openpyxl requests tqdm pytest
 
-      - name: Check NCBI email configuration
-        env:
-          NCBI_EMAIL: ${{ secrets.NCBI_EMAIL }}
-        run: |
-          if [ -z "$NCBI_EMAIL" ]; then
-            echo "ERROR: NCBI_EMAIL is NOT available"
-            exit 1
-          else
-            echo "SUCCESS: NCBI_EMAIL is available"
-          fi
-
       - name: Run PubMed extraction
         env:
           NCBI_EMAIL: ${{ secrets.NCBI_EMAIL }}
