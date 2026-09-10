@@ -1,5 +1,8 @@
 name: KOL Ranking - CI
 
+permissions:
+  contents: read
+
 on:
   push:
     branches:
@@ -7,6 +10,10 @@ on:
   pull_request:
     branches:
       - main
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -31,3 +38,6 @@ jobs:
         env:
           PYTHONPATH: ${{github.workspace}}
         run: pytest -q
+
+      - name: Build Docker image
+        run: docker build -t kol-ranking:${{ github.sha }} .

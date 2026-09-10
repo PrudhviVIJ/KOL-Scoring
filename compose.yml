@@ -1,5 +1,27 @@
 services:
+  pubmed:
+    build: .
+    command: python -m src.extraction.pubmed
+    environment:
+      NCBI_EMAIL: ${NCBI_EMAIL}
+      NCBI_API_KEY: ${NCBI_API_KEY}
+    volumes:
+      - ./outputs:/app/outputs
+
+  nih:
+    build: .
+    command: python -m src.extraction.nih
+    volumes:
+      - ./outputs:/app/outputs
+
+  clinical-trials:
+    build: .
+    command: python -m src.extraction.clinical_trials
+    volumes:
+      - ./outputs:/app/outputs
+
   ranking:
     build: .
+    command: python -m src.pipeline
     volumes:
       - ./outputs:/app/outputs

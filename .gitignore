@@ -20,3 +20,5 @@ outputs/
 *.log
 *.tmp
 *.bak
+.env
+.tmp.driveupload/

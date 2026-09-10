@@ -1,10 +1,19 @@
 name: KOL Ranking - CD
 
+permissions:
+  contents: read
+
 on:
   workflow_dispatch:
   push:
     branches:
       - main
+  schedule:
+    - cron: "0 2 * * 1"
+
+concurrency:
+  group: cd-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -23,7 +32,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pandas openpyxl requests tqdm pytest
+          pip install -r requirements.txt
 
       - name: Run PubMed extraction
         env:
@@ -40,8 +49,11 @@ jobs:
       - name: Run pipeline
         run: python -m src.pipeline
 
-      - name: Upload ranking artifact
+      - name: Upload ranking outputs
+        if: ${{ always() }}
         uses: actions/upload-artifact@v4
         with:
           name: kol-ranking-output
-          path: outputs/ranking/KOL_Ranking.xlsx
+          path: outputs/
+          retention-days: 30
+          if-no-files-found: warn
