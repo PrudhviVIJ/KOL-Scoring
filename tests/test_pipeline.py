@@ -1,3 +1,5 @@
+import json
+
 import pandas as pd
 
 from src.pipeline import PipelineConfig, run_pipeline
@@ -67,9 +69,19 @@ def test_run_pipeline_keeps_secondary_name_fields(tmp_path):
 
     output_path = run_pipeline(config)
     ranking = pd.read_excel(output_path)
+    metadata = json.loads((output_dir / "run_metadata.json").read_text(encoding="utf-8"))
 
     assert not ranking.empty
     row = ranking.loc[ranking["Normalized Name"] == "SMITH JOHN"].iloc[0]
     assert row["NIH Score"] > 0
     assert row["Clinical Trial Score"] > 0
-
+    assert metadata["output_file"] == str(output_path)
+    assert metadata["source_rows"] == {
+        "pubmed_raw": 1,
+        "pubmed_after_deduplication": 1,
+        "nih": 1,
+        "clinical_trials": 1,
+    }
+    assert metadata["ranking_rows"] == len(ranking)
+    assert metadata["scoring_weights"]
+    assert metadata["run_timestamp_utc"].endswith("+00:00")
