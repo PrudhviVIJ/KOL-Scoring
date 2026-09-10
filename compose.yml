@@ -1,0 +1,5 @@
+services:
+  ranking:
+    build: .
+    volumes:
+      - ./outputs:/app/outputs
